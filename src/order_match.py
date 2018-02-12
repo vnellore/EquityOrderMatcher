@@ -57,7 +57,7 @@ def processQueries(queries):
     return list(queries)
 
 def readQueryFile():
-    queryFile = open('c:\\temp\\query_input.txt')
+    queryFile = open('/Users/radhika/Documents/GitHub/EquityOrderMatcher/data/queries.txt')
     queryList = []
     with queryFile:
         for line in queryFile:
@@ -67,7 +67,7 @@ def readQueryFile():
 
 if __name__ == '__main__':
     #f = open(os.environ['OUTPUT_PATH'], 'w')
-    f = open('C:\\temp\\gs_output.txt','w')
+    f = open('/Users/radhika/Documents/GitHub/EquityOrderMatcher/data/gs_output.txt','w')
     f.seek(0)
     f.truncate()
 

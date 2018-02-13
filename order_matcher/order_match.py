@@ -1,29 +1,14 @@
 import os
 import sys
-from models import EquityOrder
+from order_matcher.models import EquityOrder, valid_order_types, valid_queries
+from order_matcher.validation import validate_order
 
 order_book = []
-
-def validate_order(equity_order):
-    try:
-        # validate quantity
-        int(equity_order.quantity)
-        
-        # validate price
-        float(equity_order.price)
-        
-        print(f'{equity_order.order_id} - Accept')
-
-    except ValueError:
-        print(f'{equity_order.order_id} - Reject - 303 - Invalid order details')
-
 
 # Complete the function below.
 
 def processQueries(queries):
     # Write your code here.
-    valid_queries = ['N','A','X','M','Q']
-    valid_order_types = ['M', 'L', 'I']
 
     for i in queries:
         query = i.split(',')
@@ -57,7 +42,7 @@ def processQueries(queries):
     return list(queries)
 
 def readQueryFile():
-    queryFile = open('/Users/radhika/Documents/GitHub/EquityOrderMatcher/data/queries.txt')
+    queryFile = open('..\\data\\queries.txt')
     queryList = []
     with queryFile:
         for line in queryFile:
@@ -67,7 +52,7 @@ def readQueryFile():
 
 if __name__ == '__main__':
     #f = open(os.environ['OUTPUT_PATH'], 'w')
-    f = open('/Users/radhika/Documents/GitHub/EquityOrderMatcher/data/gs_output.txt','w')
+    f = open('..\\data\\gs_output.txt','w')
     f.seek(0)
     f.truncate()
 

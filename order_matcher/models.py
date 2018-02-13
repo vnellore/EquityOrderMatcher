@@ -1,3 +1,5 @@
+valid_queries = ('N','A','X','M','Q')
+valid_order_types = ('M', 'L', 'I')
 
 class EquityOrder:
     def __init__(self, order_id, time_stamp, symbol, 

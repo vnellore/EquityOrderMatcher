@@ -18,3 +18,47 @@ class EquityOrder:
 
     def validate(self):
         pass
+
+def build_equity_order(query, input_cmd):
+
+    # TODO : Add more validation for query
+    order_id = query[1].strip()
+    time_stamp = query[2].strip()
+
+    if input_cmd != 'X':
+        symbol = query[3].strip()
+        order_type = query[4].strip()
+        transaction_side = query[5].strip()
+        price = query[6].strip()
+        quantity = query[7].strip()
+    else:
+        symbol = ''
+        order_type = ''
+        transaction_side = ''
+        price = ''
+        quantity = ''
+
+    equity_order = EquityOrder(order_id, time_stamp,
+                                      symbol, order_type,
+                                      transaction_side, price, quantity)
+    return equity_order
+
+
+def build_query_eq_order(query):
+    input_cmd = query[0].strip()
+    if input_cmd != 'Q':
+        print('Invalid query')
+        return None
+    else:
+        time_stamp = ''
+        order_id = ''
+        symbol = ''
+        order_type = ''
+        transaction_side = ''
+        price = ''
+        quantity = ''
+        equity_order = EquityOrder(order_id, time_stamp,
+                                      symbol, order_type,
+                                      transaction_side, price, quantity)
+        return equity_order                              
+        

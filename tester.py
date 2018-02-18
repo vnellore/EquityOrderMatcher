@@ -3,7 +3,7 @@ import sys
 from order_matcher import order_match
 
 
-def readQueryFile(inputFile):
+def read_query_file(inputFile):
     queryFile = open(inputFile)
     queryList = []
     with queryFile:
@@ -13,7 +13,7 @@ def readQueryFile(inputFile):
     return queryList
 
 
-def writeOutput(outputFile, response):
+def write_output(outputFile, response):
     #f = open(os.environ['OUTPUT_PATH'], 'w')
     f = open(outputFile, 'w')
     f.seek(0)
@@ -36,8 +36,8 @@ if __name__ == '__main__':
     #    queries_item = input()
     #    queries.append(queries_item)
 
-    queries = readQueryFile('.\\data\\queries.txt')
+    queries = read_query_file('.\\data\\queries.txt')
 
-    response = order_match.processQueries(queries)
+    response = order_match.process_queries(queries)
 
-    writeOutput('.\\data\\gs_output.txt', response)
+    write_output('.\\data\\gs_output.txt', response)

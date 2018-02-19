@@ -2,6 +2,15 @@ valid_queries = ('N', 'A', 'X', 'M', 'Q')
 valid_order_types = ('M', 'L', 'I')
 
 
+class MatchQuery:
+    def __init__(self, time_stamp, symbol):
+        self.time_stamp = time_stamp
+        self.symbol = symbol
+
+    def __str__(self):
+        return str(self.__dict__)
+    
+
 class EquityOrder:
     def __init__(self, order_id, time_stamp, symbol,
                  order_type, transaction_side, price, quantity):
@@ -43,6 +52,22 @@ def build_equity_order(query, input_cmd):
                                       transaction_side, price, quantity)
     return equity_order
 
+
+def build_match_query(query):
+    input_cmd = query[0].strip()
+    if input_cmd != 'M':
+        print('Invalid query')
+        return None
+    else:
+        #TODO : Validate
+        time_stamp = query[1]
+        if len(query) == 3:
+            symbol = query[2]
+        else:
+            symbol = ''
+                
+        match_query = MatchQuery(time_stamp, symbol)
+        return match_query
 
 def build_query_eq_order(query):
     input_cmd = query[0].strip()

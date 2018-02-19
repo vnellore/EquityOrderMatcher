@@ -69,7 +69,45 @@ def process_cancel_order(equity_order, order_book):
 
     return order_status
 
-def perform_match(order_book):
+def perform_match(match_query, order_book):
+    # check if symbol is passed in match query
+    if match_query.symbol is None or match_query.symbol == '':
+        symbol_match = False
+    else:
+        symbol_match = True
+
+    int_time_stamp = int(match_query.time_stamp)
+       
+    if symbol_match:
+        filtered_orders = { order_id : order for order_id, order in order_book.items()\
+         if order.symbol == match_query.symbol }
+    else:
+        filtered_orders = { order_id : order for order_id, order in order_book.items()\
+         if int(order.time_stamp) <= int_time_stamp }
+    
+    for _, current_order in filtered_orders.items():
+        find_match(current_order, filtered_orders)    
+
+def find_match(order, order_book):
+    for i, j in order_book.items():
+        if order.symbol == j.symbol and order.transaction_side != j.transaction_side:
+            # check for quantity
+            if order.quantity == j.quantity:
+                # ALN|1,L,100,60.90|60.90,100,L,10
+                print(f'{order.symbol}|{order.order_id}, {order.order_type},{order.quantity},\
+                 {order.price}|{j.price},{j.quantity},{j.order_type},{j.order_id}')
+
+                del order_book[order.order_id]
+                del order_book[j.order_id]
+                
+            elif order.quantity > j.quantity:
+                pass
+                # match
+            else:
+                pass
+                # match   
+            pass
+
     pass
 
 def show_order_book(order_book):

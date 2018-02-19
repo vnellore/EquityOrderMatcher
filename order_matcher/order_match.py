@@ -36,10 +36,9 @@ def process_queries(queries):
                     equity_order, order_book))
             
             elif input_cmd == 'M':
-                equity_order = models.build_equity_order(query, input_cmd)
-                print(processor.process_cancel_order(
-                    equity_order, order_book))
-            
+                match_query = models.build_match_query(query)
+                processor.perform_match(match_query, order_book)
+                            
             elif input_cmd == 'Q':
                 equity_order = models.build_query_eq_order(query)
                 print(processor.show_order_book(order_book))

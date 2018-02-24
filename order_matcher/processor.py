@@ -1,3 +1,5 @@
+import copy
+
 def validate_order(equity_order):
     try:
         # validate quantity
@@ -85,30 +87,38 @@ def perform_match(match_query, order_book):
         filtered_orders = { order_id : order for order_id, order in order_book.items()\
          if int(order.time_stamp) <= int_time_stamp }
     
-    for _, current_order in filtered_orders.items():
-        find_match(current_order, filtered_orders)    
+    updated_order_book = find_match(filtered_orders)    
+        
 
-def find_match(order, order_book):
-    for i, j in order_book.items():
-        if order.symbol == j.symbol and order.transaction_side != j.transaction_side:
-            # check for quantity
-            if order.quantity == j.quantity:
-                # ALN|1,L,100,60.90|60.90,100,L,10
-                print(f'{order.symbol}|{order.order_id}, {order.order_type},{order.quantity},\
-                 {order.price}|{j.price},{j.quantity},{j.order_type},{j.order_id}')
+def find_match(order_book):
+    
+    temp_order_book = copy.deepcopy(order_book)
+    temp_order_book_keys = list(temp_order_book.keys())
 
-                del order_book[order.order_id]
-                del order_book[j.order_id]
-                
-            elif order.quantity > j.quantity:
-                pass
-                # match
-            else:
-                pass
-                # match   
-            pass
+    for j in temp_order_book_keys:
+        if j in temp_order_book:
+            order = temp_order_book[j]    
+            for i in temp_order_book_keys:
+                if i != j and i in temp_order_book:
+                    temp_order = temp_order_book[i]
+                    if order.symbol == temp_order.symbol and order.transaction_side != temp_order.transaction_side:
+                        # check for quantity
+                        if order.quantity == temp_order.quantity:
+                            # ALN|1,L,100,60.90|60.90,100,L,10
+                            print(f'{order.symbol}|{order.order_id}, {order.order_type},{order.quantity},\
+                            {order.price}|{temp_order.price},{temp_order.quantity},{temp_order.order_type},{temp_order.order_id}')
 
-    pass
+                            del temp_order_book[order.order_id]
+                            del temp_order_book[i]
+                            
+                        elif order.quantity > temp_order.quantity:
+                            temp_order_book[order.order_id].quantity -= temp_order.quantity
+                            del temp_order_book[i]
+                        else:
+                            temp_order_book[i].quantity -= order.quantity
+                            del temp_order_book[order.order_id]
+
+    return temp_order_book
 
 def show_order_book(order_book):
     print(order_book)

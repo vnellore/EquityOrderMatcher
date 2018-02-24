@@ -5,9 +5,6 @@ order_book = {}
 
 # Complete the function below.
 
-
-
-
 def process_queries(queries):
     # Write your code here.
 

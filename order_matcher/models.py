@@ -14,13 +14,13 @@ class MatchQuery:
 class EquityOrder:
     def __init__(self, order_id, time_stamp, symbol,
                  order_type, transaction_side, price, quantity):
-        self.order_id = order_id
-        self.time_stamp = time_stamp
+        self.order_id = int(order_id)
+        self.time_stamp = int(time_stamp)
         self.symbol = symbol
         self.order_type = order_type
         self.transaction_side = transaction_side
-        self.price = price
-        self.quantity = quantity
+        self.price = float(price)
+        self.quantity = int(quantity)
 
     def __str__(self):
         return str(self.__dict__)

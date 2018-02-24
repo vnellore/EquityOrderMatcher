@@ -92,33 +92,41 @@ def perform_match(match_query, order_book):
 
 def find_match(order_book):
     
-    temp_order_book = copy.deepcopy(order_book)
-    temp_order_book_keys = list(temp_order_book.keys())
+    working_order_book = copy.deepcopy(order_book)
+    wo_keys = list(working_order_book.keys())
 
-    for j in temp_order_book_keys:
-        if j in temp_order_book:
-            order = temp_order_book[j]    
-            for i in temp_order_book_keys:
-                if i != j and i in temp_order_book:
-                    temp_order = temp_order_book[i]
-                    if order.symbol == temp_order.symbol and order.transaction_side != temp_order.transaction_side:
+    for j in wo_keys:
+        if j in working_order_book:
+            order_to_match = working_order_book[j]    
+            for i in wo_keys:
+                if i != j and i in working_order_book:
+                    matched_order = working_order_book[i]
+                    if order_to_match.symbol == matched_order.symbol and order_to_match.transaction_side != matched_order.transaction_side:
+                        
                         # check for quantity
-                        if order.quantity == temp_order.quantity:
-                            # ALN|1,L,100,60.90|60.90,100,L,10
-                            print(f'{order.symbol}|{order.order_id}, {order.order_type},{order.quantity},\
-                            {order.price}|{temp_order.price},{temp_order.quantity},{temp_order.order_type},{temp_order.order_id}')
+                        if order_to_match.quantity == matched_order.quantity:
+                            print_matched_order(order_to_match, matched_order, matched_order.quantity)
 
-                            del temp_order_book[order.order_id]
-                            del temp_order_book[i]
+                            del working_order_book[order_to_match.order_id]
+                            del working_order_book[i]
                             
-                        elif order.quantity > temp_order.quantity:
-                            temp_order_book[order.order_id].quantity -= temp_order.quantity
-                            del temp_order_book[i]
+                        elif order_to_match.quantity > matched_order.quantity:
+                            match_quantity = matched_order.quantity
+                            print_matched_order(order_to_match, matched_order, match_quantity)
+                            working_order_book[order_to_match.order_id].quantity -= matched_order.quantity
+                            del working_order_book[i]
                         else:
-                            temp_order_book[i].quantity -= order.quantity
-                            del temp_order_book[order.order_id]
+                            match_quantity = order_to_match.quantity
+                            print_matched_order(order_to_match, matched_order, match_quantity)
+                            working_order_book[i].quantity -= order_to_match.quantity
+                            del working_order_book[order_to_match.order_id]
 
-    return temp_order_book
+    return working_order_book
 
+def print_matched_order(order_to_match, matched_order, match_quantity):
+    # ALN|1,L,100,60.90|60.90,100,L,10
+    print(f'{order_to_match.symbol}|{order_to_match.order_id}, {order_to_match.order_type},{match_quantity},{order_to_match.price}|{matched_order.price},{match_quantity},{matched_order.order_type},{matched_order.order_id}')
+
+                            
 def show_order_book(order_book):
     print(order_book)
